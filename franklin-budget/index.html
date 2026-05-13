@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Franklin, TN — FY 2026 Budget Walkthrough</title>
+  <meta name="description" content="An interactive walkthrough of the City of Franklin, TN proposed FY 2026 budget." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Stripe-inspired palette */
+      --purple:       #533afd;
+      --purple-hover: #4434d4;
+      --purple-deep:  #2e2b8c;
+      --purple-soft:  #b9b9f9;
+      --purple-tint:  #eef0ff;
+      --navy:         #061b31;
+      --brand-dark:   #1c1e54;
+      --label:        #273951;
+      --body:         #64748d;
+      --bg:           #ffffff;
+      --bg-alt:       #f7f9fc;
+      --border:       #e5edf5;
+      --border-strong:#d6d9fc;
+      --ruby:         #ea2261;
+      --magenta:      #f96bee;
+      --magenta-tint: #ffd7ef;
+      --green:        #15be53;
+      --green-text:   #108c3d;
+      --green-tint:   rgba(21,190,83,0.18);
+      --amber:        #9b6829;
+      --amber-tint:   #fff3da;
+      --shadow-blue:  rgba(50,50,93,0.25);
+      --shadow-near:  rgba(0,0,0,0.1);
+      --shadow-amb:   rgba(23,23,23,0.08);
+
+      --radius-sm: 4px;
+      --radius:    6px;
+      --radius-lg: 8px;
+
+      --shadow-1: 0 3px 6px rgba(23,23,23,0.06);
+      --shadow-2: 0 15px 35px rgba(23,23,23,0.08);
+      --shadow-3: 0 30px 45px -30px var(--shadow-blue), 0 18px 36px -18px var(--shadow-near);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--label);
+      font-family: 'Inter', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+      font-weight: 300;
+      font-feature-settings: "ss01" on, "cv11" on;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+    .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" on; }
+    .mono { font-family: 'JetBrains Mono', 'SourceCodePro', ui-monospace, monospace; font-weight: 500; }
+    h1, h2, h3, h4 { color: var(--navy); font-weight: 300; margin: 0; letter-spacing: -0.01em; }
+    h1 { font-size: clamp(36px, 5.4vw, 56px); line-height: 1.04; letter-spacing: -0.028em; }
+    h2 { font-size: clamp(26px, 3.2vw, 32px); line-height: 1.12; letter-spacing: -0.02em; }
+    h3 { font-size: 22px; line-height: 1.12; letter-spacing: -0.01em; }
+    h4 { font-size: 16px; line-height: 1.2; letter-spacing: 0; font-weight: 400; color: var(--navy); }
+    p  { margin: 0; color: var(--body); }
+    a  { color: var(--purple); text-decoration: none; }
+    a:hover { color: var(--purple-hover); }
+
+    /* ------- Layout shell ------- */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.78);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; gap: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--navy); font-weight: 500; font-size: 14px;
+    }
+    .brand-mark {
+      width: 26px; height: 26px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--purple) 0%, var(--brand-dark) 100%);
+      display: grid; place-items: center; color: white; font-weight: 600; font-size: 12px;
+    }
+    .nav-links { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+    .nav-links a {
+      font-size: 13px; color: var(--label); padding: 6px 10px;
+      border-radius: var(--radius); transition: background .15s ease, color .15s ease;
+    }
+    .nav-links a:hover { background: var(--purple-tint); color: var(--purple); }
+
+    section { padding: 88px 24px; }
+    section.tight { padding: 48px 24px; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500; color: var(--purple);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 4px 10px; border-radius: 999px;
+      background: var(--purple-tint); border: 1px solid var(--border-strong);
+    }
+    .lede { font-size: 18px; line-height: 1.55; color: var(--body); max-width: 64ch; }
+
+    /* ------- Hero ------- */
+    .hero { padding-top: 96px; padding-bottom: 64px; }
+    .hero-grid {
+      display: grid; gap: 56px; align-items: end;
+      grid-template-columns: minmax(0,1fr) minmax(0,420px);
+    }
+    .hero-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 18px; color: var(--body); font-size: 13px; }
+    .hero-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border-strong); }
+    .hero h1 { margin-top: 18px; }
+    .hero .lede { margin-top: 20px; }
+
+    .hero-card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 24px; box-shadow: var(--shadow-3);
+    }
+    .hero-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+    .hero-card .num-xl {
+      font-size: 44px; font-weight: 300; color: var(--navy);
+      letter-spacing: -0.025em; line-height: 1;
+    }
+    .delta { font-size: 13px; font-weight: 500; padding: 2px 8px; border-radius: var(--radius-sm); }
+    .delta.up   { color: var(--green-text); background: var(--green-tint); border: 1px solid rgba(21,190,83,0.35); }
+    .delta.down { color: var(--ruby); background: rgba(234,34,97,0.10); border: 1px solid rgba(234,34,97,0.25); }
+    .hero-card hr { border: 0; border-top: 1px solid var(--border); margin: 18px 0; }
+    .hero-card .label { font-size: 12px; color: var(--body); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ------- Stat cards ------- */
+    .stat-grid {
+      display: grid; gap: 16px; margin-top: 40px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+    .stat {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px;
+      box-shadow: var(--shadow-1);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); }
+    .stat .label { font-size: 12px; color: var(--body); text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat .num-lg { font-size: 32px; color: var(--navy); margin-top: 8px; line-height: 1; letter-spacing: -0.022em; }
+    .stat .foot { margin-top: 10px; font-size: 13px; color: var(--body); display: flex; gap: 8px; align-items: center; }
+
+    /* ------- Section header ------- */
+    .sec-head { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+
+    /* ------- Property tax visual ------- */
+    .tax-grid {
+      display: grid; gap: 40px; margin-top: 48px;
+      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+      align-items: center;
+    }
+    @media (max-width: 760px) {
+      .hero-grid, .tax-grid, .stat-grid, .spend-grid, .residents-grid { grid-template-columns: 1fr !important; }
+      section { padding: 64px 20px; }
+      .hero { padding-top: 72px; padding-bottom: 40px; }
+    }
+
+    .donut {
+      position: relative;
+      width: 320px; height: 320px; margin: 0 auto;
+      filter: drop-shadow(0 24px 30px rgba(50,50,93,0.15));
+    }
+    .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .donut .center {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .donut .center .label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--body); }
+    .donut .center .num   { font-size: 44px; color: var(--navy); letter-spacing: -0.024em; line-height: 1; margin-top: 4px; }
+    .donut .center .sub   { font-size: 12px; color: var(--body); margin-top: 6px; }
+    .donut circle.seg { transition: stroke-width .25s ease, opacity .2s ease; cursor: pointer; }
+    .donut circle.seg:hover { stroke-width: 36; }
+
+    .legend { display: flex; flex-direction: column; gap: 12px; }
+    .legend-item {
+      display: grid; grid-template-columns: 14px 1fr auto; gap: 14px; align-items: center;
+      padding: 14px 16px; background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+      cursor: pointer;
+    }
+    .legend-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+    .legend-item.active { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-tint); }
+    .swatch { width: 14px; height: 14px; border-radius: 3px; }
+    .legend-item h4 { font-size: 14px; font-weight: 500; }
+    .legend-item p  { font-size: 13px; margin-top: 2px; color: var(--body); }
+    .legend-item .price { color: var(--navy); font-weight: 400; font-size: 16px; }
+    .legend-item .price small { color: var(--body); font-weight: 300; font-size: 12px; margin-left: 4px; }
+
+    /* ------- Where money goes ------- */
+    .spend-grid {
+      display: grid; gap: 16px; margin-top: 40px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+    .card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 24px; box-shadow: var(--shadow-1);
+      display: flex; flex-direction: column; gap: 12px;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-3); border-color: var(--border-strong); }
+    .card .icon {
+      width: 36px; height: 36px; border-radius: var(--radius);
+      display: grid; place-items: center; background: var(--purple-tint); color: var(--purple);
+    }
+    .card h3 { font-size: 18px; font-weight: 400; }
+    .card .body { font-size: 14px; color: var(--body); line-height: 1.6; }
+    .card .meta { font-size: 12px; color: var(--purple); text-transform: uppercase; letter-spacing: 0.08em; margin-top: auto; }
+
+    /* ------- Public safety hires (dark feature panel) ------- */
+    .feature-dark {
+      background: var(--brand-dark);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-top: 40px;
+      box-shadow: var(--shadow-3);
+      position: relative; overflow: hidden;
+    }
+    .feature-dark::before {
+      content: ""; position: absolute; right: -120px; top: -120px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(83,58,253,0.45), transparent 65%);
+      pointer-events: none;
+    }
+    .feature-dark::after {
+      content: ""; position: absolute; left: -80px; bottom: -120px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(249,107,238,0.30), transparent 65%);
+      pointer-events: none;
+    }
+    .feature-dark h3 { color: white; font-weight: 300; letter-spacing: -0.014em; font-size: 26px; }
+    .feature-dark p  { color: rgba(255,255,255,0.72); max-width: 56ch; }
+    .hires-grid {
+      display: grid; gap: 12px; margin-top: 28px;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      position: relative;
+    }
+    @media (max-width: 760px) { .hires-grid { grid-template-columns: repeat(2, 1fr); } }
+    .hire {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 16px;
+      backdrop-filter: blur(8px);
+      transition: background .2s ease, transform .2s ease, border-color .2s ease;
+    }
+    .hire:hover { background: rgba(255,255,255,0.10); transform: translateY(-2px); border-color: rgba(255,255,255,0.22); }
+    .hire .count {
+      font-size: 28px; font-weight: 300; color: white; letter-spacing: -0.02em; line-height: 1;
+    }
+    .hire .role { color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 14px; font-weight: 400; }
+    .hire .dept { color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ------- Residents grid ------- */
+    .residents-grid {
+      display: grid; gap: 16px; margin-top: 40px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+    .rate {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 24px; box-shadow: var(--shadow-1);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .rate:hover { transform: translateY(-3px); box-shadow: var(--shadow-3); }
+    .rate .header { display: flex; justify-content: space-between; align-items: center; }
+    .rate .name { font-size: 14px; color: var(--label); font-weight: 500; }
+    .rate .arrow {
+      margin: 14px 0 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .rate .from {
+      font-size: 24px; color: var(--body); font-weight: 300; text-decoration: line-through;
+      text-decoration-color: rgba(100,116,141,0.4); letter-spacing: -0.012em;
+    }
+    .rate .to { font-size: 32px; color: var(--navy); font-weight: 300; letter-spacing: -0.02em; }
+    .rate .arrow-svg { color: var(--purple); }
+    .rate .effective { font-size: 12px; color: var(--body); margin-top: 6px; }
+    .rate .effective strong { color: var(--label); font-weight: 500; }
+    .bar { height: 8px; background: var(--border); border-radius: 99px; margin-top: 18px; overflow: hidden; position: relative; }
+    .bar .fill {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      background: linear-gradient(90deg, var(--purple), var(--magenta));
+      border-radius: 99px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(.2,.65,.25,1);
+    }
+    .bar.in-view .fill { width: var(--w, 50%); }
+
+    /* ------- Mack Hatcher detail ------- */
+    .mack {
+      margin-top: 40px;
+      display: grid; gap: 32px; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      align-items: center;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    @media (max-width: 760px) { .mack { grid-template-columns: 1fr; } }
+    .road-diagram { display: flex; flex-direction: column; gap: 24px; }
+    .road {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px;
+    }
+    .road .name { font-size: 13px; font-weight: 500; color: var(--label); margin-bottom: 12px; }
+    .road .segments { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .lanes { display: flex; gap: 3px; align-items: center; }
+    .lane { width: 18px; height: 6px; border-radius: 2px; background: var(--border); }
+    .lane.new { background: var(--purple); box-shadow: 0 0 0 2px var(--purple-tint); }
+    .arrow-h { color: var(--purple); }
+    .road .stat-row { display: flex; gap: 24px; margin-top: 14px; }
+    .road .stat-row div { font-size: 12px; color: var(--body); }
+    .road .stat-row strong { display: block; color: var(--navy); font-weight: 400; font-size: 18px; letter-spacing: -0.01em; }
+
+    /* ------- Bottom line ------- */
+    .bottom-line {
+      background: linear-gradient(180deg, var(--bg-alt), white);
+      border-top: 1px solid var(--border);
+    }
+    .takeaways { display: grid; gap: 12px; margin-top: 32px; grid-template-columns: repeat(3, minmax(0,1fr)); }
+    @media (max-width: 760px) { .takeaways { grid-template-columns: 1fr; } }
+    .takeaway {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .takeaway .pill {
+      flex-shrink: 0;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      background: var(--purple-tint); color: var(--purple);
+      display: grid; place-items: center; font-weight: 500;
+    }
+    .takeaway p { color: var(--label); font-size: 14px; line-height: 1.5; }
+
+    /* ------- Plain English ------- */
+    .plain-list {
+      margin-top: 40px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-2);
+      overflow: hidden;
+    }
+    .plain-row {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 20px;
+      padding: 22px 28px;
+      align-items: flex-start;
+      border-top: 1px solid var(--border);
+      transition: background .15s ease;
+    }
+    .plain-row:first-child { border-top: 0; }
+    .plain-row:hover { background: var(--purple-tint); }
+    .plain-row .glyph {
+      width: 36px; height: 36px; border-radius: var(--radius);
+      background: var(--purple-tint); color: var(--purple);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .plain-row p {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--label);
+      padding-top: 6px;
+    }
+    .plain-row p strong { color: var(--navy); font-weight: 500; }
+    @media (max-width: 760px) {
+      .plain-row { padding: 18px 20px; gap: 14px; grid-template-columns: 32px 1fr; }
+      .plain-row .glyph { width: 32px; height: 32px; }
+    }
+
+    /* ------- Footer ------- */
+    footer {
+      padding: 32px 24px 56px; border-top: 1px solid var(--border);
+      color: var(--body); font-size: 12px;
+    }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    /* tiny utility */
+    .row { display: flex; gap: 12px; align-items: center; }
+    .pillbtn {
+      font-size: 13px; color: var(--purple); padding: 6px 12px;
+      border-radius: var(--radius-sm); border: 1px solid var(--border-strong);
+      background: white; cursor: pointer; transition: background .15s ease;
+    }
+    .pillbtn:hover { background: var(--purple-tint); }
+    .pillbtn.primary { background: var(--purple); color: white; border-color: var(--purple); }
+    .pillbtn.primary:hover { background: var(--purple-hover); border-color: var(--purple-hover); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span>Franklin, TN &middot; FY 2026 Budget</span>
+    </div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#tax">Property Tax</a>
+      <a href="#spending">Spending</a>
+      <a href="#residents">Resident Impact</a>
+      <a href="#bottom">Bottom Line</a>
+      <a href="#plain">Plain English</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Fiscal Year 2025 – 2026</span>
+      <h1>A budget shaped by growth, reappraisal, and a 10-year reinvestment plan.</h1>
+      <p class="lede">City Administrator Eric Stuckey presented Franklin's recommended FY26 budget on May 12, 2025. It funds eight new public safety and tech positions, raises water and sewer rates, and restructures the property tax rate after a county-wide reappraisal — all under a framework called <strong style="color:var(--label); font-weight:500">Invest Franklin 2.0</strong>.</p>
+      <div class="hero-meta">
+        <span>July 1, 2025 – June 30, 2026</span>
+        <span class="dot"></span>
+        <span>Presented May 12, 2025</span>
+        <span class="dot"></span>
+        <span>Source: City of Franklin</span>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-row">
+        <div>
+          <div class="label">All-Funds Total</div>
+          <div class="num-xl num">$243.3M</div>
+        </div>
+        <span class="delta down num">↓ 2.7% YoY</span>
+      </div>
+      <hr />
+      <div class="hero-card-row">
+        <div>
+          <div class="label">General Fund</div>
+          <div class="num-xl num">$128.1M</div>
+        </div>
+        <span class="delta up num">↑ 9.7% YoY</span>
+      </div>
+      <hr />
+      <div class="hero-card-row">
+        <div>
+          <div class="label">Property Tax Rate</div>
+          <div class="num-xl num">$0.32</div>
+        </div>
+        <span style="font-size:12px; color:var(--body); text-align:right; max-width:130px">per $100 of<br/>assessed value</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="label">Financial condition</div>
+        <div class="num-lg">Excellent</div>
+        <div class="foot">Strong reserves, manageable debt, and tax rates among the lowest in America.</div>
+      </div>
+      <div class="stat">
+        <div class="label">Headline initiative</div>
+        <div class="num-lg">Invest Franklin 2.0</div>
+        <div class="foot">Reinvestment framework modeled on the original 2016 effort, which funded hundreds of millions in infrastructure.</div>
+      </div>
+      <div class="stat">
+        <div class="label">New General Fund hires</div>
+        <div class="num-lg num">8 positions</div>
+        <div class="foot">Three firefighters, three police officers, a victim support counselor, and an IS developer.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTY TAX -->
+<section id="tax" style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Property Tax</span>
+      <h2>The $0.32 rate, broken down by purpose.</h2>
+      <p class="lede">Following a state-required four-year reappraisal in Williamson County, the proposed rate is $0.32 per $100 of assessed valuation. Hover the donut or click a band to see what each portion funds.</p>
+    </div>
+
+    <div class="tax-grid">
+      <div class="donut" id="donut" aria-label="Property tax composition donut chart">
+        <svg viewBox="0 0 120 120" role="img">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#eef0ff" stroke-width="20" />
+          <!-- Segments populated by JS for correct math: total = 0.32 -->
+          <circle id="seg-base"   class="seg" cx="60" cy="60" r="48" fill="none" stroke="#533afd" stroke-width="30" stroke-linecap="butt" />
+          <circle id="seg-infra"  class="seg" cx="60" cy="60" r="48" fill="none" stroke="#1c1e54" stroke-width="30" stroke-linecap="butt" />
+          <circle id="seg-ops"    class="seg" cx="60" cy="60" r="48" fill="none" stroke="#f96bee" stroke-width="30" stroke-linecap="butt" />
+        </svg>
+        <div class="center">
+          <div class="label">Tax Rate</div>
+          <div class="num num" id="donut-num">$0.32</div>
+          <div class="sub" id="donut-sub">total per $100</div>
+        </div>
+      </div>
+
+      <div class="legend" id="legend">
+        <div class="legend-item" data-seg="base" data-num="$0.2271" data-sub="Base operations &amp; debt">
+          <div class="swatch" style="background:#533afd"></div>
+          <div>
+            <h4>Base operations &amp; debt service</h4>
+            <p>Funds the city's existing operations, capital obligations, and debt repayment.</p>
+          </div>
+          <div class="price num">$0.2271<small>71%</small></div>
+        </div>
+        <div class="legend-item" data-seg="infra" data-num="$0.0679" data-sub="Infrastructure &amp; transportation">
+          <div class="swatch" style="background:#1c1e54"></div>
+          <div>
+            <h4>Infrastructure &amp; transportation</h4>
+            <p>Top priority: expanding Mack Hatcher Southeast and Northwest from two lanes to four.</p>
+          </div>
+          <div class="price num">$0.0679<small>21%</small></div>
+        </div>
+        <div class="legend-item" data-seg="ops" data-num="$0.0250" data-sub="City operations capacity">
+          <div class="swatch" style="background:#f96bee"></div>
+          <div>
+            <h4>City operations &amp; service delivery</h4>
+            <p>The first additional operational tax capacity Franklin has added since 2016.</p>
+          </div>
+          <div class="price num">$0.0250<small>8%</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPENDING -->
+<section id="spending">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Where the Money Goes</span>
+      <h2>Three priorities under Invest Franklin 2.0.</h2>
+      <p class="lede">Each dollar in the FY26 budget routes toward growth-related needs: more first responders, real road capacity, and compensation that keeps the city competitive as an employer.</p>
+    </div>
+
+    <div class="spend-grid">
+      <div class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12z"/></svg>
+        </div>
+        <h3>Public Safety</h3>
+        <div class="body">Adds eight new General Fund positions — three firefighters, three patrol officers, a victim support counselor, and an information-systems developer.</div>
+        <div class="meta">+8 hires</div>
+      </div>
+
+      <div class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M6 6h12M6 18h12"/></svg>
+        </div>
+        <h3>Roads &amp; Infrastructure</h3>
+        <div class="body">Partner with TDOT to widen Mack Hatcher Southeast and Northwest from two lanes to four — the city's top infrastructure priority.</div>
+        <div class="meta">2 → 4 lanes</div>
+      </div>
+
+      <div class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <h3>City Employees</h3>
+        <div class="body">Compensation plan moves all positions to the 90th percentile market target, with a 2.5% general raise plus up to 2.5% performance-based. Health premiums unchanged.</div>
+        <div class="meta">90th percentile target</div>
+      </div>
+    </div>
+
+    <!-- Public Safety detail panel -->
+    <div class="feature-dark">
+      <span class="eyebrow" style="background: rgba(255,255,255,0.10); color: white; border-color: rgba(255,255,255,0.16)">8 New General Fund Positions</span>
+      <h3 style="margin-top: 12px">More boots on the ground — and one more developer.</h3>
+      <p>Public safety hiring leads the additions, with one civilian Police Department role focused on supporting victims and a technical role to keep the city's systems running.</p>
+      <div class="hires-grid">
+        <div class="hire">
+          <div class="count num">3</div>
+          <div class="role">Firefighters</div>
+          <div class="dept">Fire Dept.</div>
+        </div>
+        <div class="hire">
+          <div class="count num">3</div>
+          <div class="role">Patrol Officers</div>
+          <div class="dept">Police Dept.</div>
+        </div>
+        <div class="hire">
+          <div class="count num">1</div>
+          <div class="role">Victim Support Counselor</div>
+          <div class="dept">Police Dept.</div>
+        </div>
+        <div class="hire">
+          <div class="count num">1</div>
+          <div class="role">Info. Systems Developer</div>
+          <div class="dept">IT / Citywide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mack Hatcher diagram -->
+    <div class="mack">
+      <div>
+        <span class="eyebrow">Top Infrastructure Priority</span>
+        <h3 style="margin-top: 12px">Mack Hatcher Parkway: 2 → 4 lanes.</h3>
+        <p style="margin-top: 10px; font-size: 14px; line-height: 1.6">Franklin will partner with TDOT to widen the two remaining bottlenecked segments of Mack Hatcher. The infrastructure portion of the property tax rate — $0.0679 of the $0.32 total — is the funding mechanism.</p>
+      </div>
+      <div class="road-diagram">
+        <div class="road">
+          <div class="name">Mack Hatcher Southeast</div>
+          <div class="segments">
+            <div>
+              <div class="lanes"><span class="lane"></span><span class="lane"></span></div>
+              <div style="font-size:12px; color: var(--body); margin-top:6px">2 lanes</div>
+            </div>
+            <svg class="arrow-h" width="32" height="20" viewBox="0 0 32 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10h26M22 4l6 6-6 6"/></svg>
+            <div>
+              <div class="lanes"><span class="lane new"></span><span class="lane new"></span><span class="lane new"></span><span class="lane new"></span></div>
+              <div style="font-size:12px; color: var(--purple); margin-top:6px; font-weight:500">4 lanes</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div><strong>Murfreesboro Rd</strong>From</div>
+            <div><strong>Columbia Ave</strong>To</div>
+          </div>
+        </div>
+        <div class="road">
+          <div class="name">Mack Hatcher Northwest</div>
+          <div class="segments">
+            <div>
+              <div class="lanes"><span class="lane"></span><span class="lane"></span></div>
+              <div style="font-size:12px; color: var(--body); margin-top:6px">2 lanes</div>
+            </div>
+            <svg class="arrow-h" width="32" height="20" viewBox="0 0 32 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10h26M22 4l6 6-6 6"/></svg>
+            <div>
+              <div class="lanes"><span class="lane new"></span><span class="lane new"></span><span class="lane new"></span><span class="lane new"></span></div>
+              <div style="font-size:12px; color: var(--purple); margin-top:6px; font-weight:500">4 lanes</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div><strong>Hillsboro Rd</strong>From</div>
+            <div><strong>New Hwy 96</strong>To</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESIDENT IMPACT -->
+<section id="residents" style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What Residents Will Pay More For</span>
+      <h2>Three rate changes that hit household bills.</h2>
+      <p class="lede">The most direct impact on residents comes through utilities and the hotel tax. Property tax restructuring is largely driven by Williamson County's mandatory reappraisal — not a discretionary hike.</p>
+    </div>
+
+    <div class="residents-grid">
+      <div class="rate">
+        <div class="header">
+          <span class="name">Water Rates</span>
+          <span class="delta up num">↑ 6.0%</span>
+        </div>
+        <div class="arrow">
+          <span class="from num">+0%</span>
+          <svg class="arrow-svg" width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h14M11 2l5 5-5 5"/></svg>
+          <span class="to num">+6%</span>
+        </div>
+        <div class="bar in-view" style="--w: 60%"><div class="fill"></div></div>
+        <div class="effective" style="margin-top:14px">Effective <strong>January 1, 2026</strong> &middot; part of the multi-year utility rate plan.</div>
+      </div>
+
+      <div class="rate">
+        <div class="header">
+          <span class="name">Sewer Rates</span>
+          <span class="delta up num">↑ 5.0%</span>
+        </div>
+        <div class="arrow">
+          <span class="from num">+0%</span>
+          <svg class="arrow-svg" width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h14M11 2l5 5-5 5"/></svg>
+          <span class="to num">+5%</span>
+        </div>
+        <div class="bar in-view" style="--w: 50%"><div class="fill"></div></div>
+        <div class="effective" style="margin-top:14px">Effective <strong>January 1, 2026</strong> &middot; part of the multi-year utility rate plan.</div>
+      </div>
+
+      <div class="rate">
+        <div class="header">
+          <span class="name">Hotel Occupancy Tax</span>
+          <span class="delta up num">+1 pt</span>
+        </div>
+        <div class="arrow">
+          <span class="from num">4%</span>
+          <svg class="arrow-svg" width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h14M11 2l5 5-5 5"/></svg>
+          <span class="to num">5%</span>
+        </div>
+        <div class="bar in-view" style="--w: 80%"><div class="fill"></div></div>
+        <div class="effective" style="margin-top:14px">First change since <strong>2004</strong> &middot; projected <strong>~$1.2M / year</strong> for parks &amp; tourism.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px; flex-direction: row; align-items: flex-start; gap: 16px; box-shadow: none;">
+      <div class="icon" style="background: var(--amber-tint); color: var(--amber); flex-shrink: 0;" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+      </div>
+      <div>
+        <h4>Health insurance deductibles updating for the first time in 20+ years</h4>
+        <p style="margin-top: 6px; font-size: 14px; line-height: 1.55">Premiums for city employees remain flat under the FY26 plan, but deductibles will be updated. The compensation plan also moves all positions to the 90th percentile of market with a 2.5% general raise plus up to 2.5% performance-based.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM LINE -->
+<section id="bottom" class="bottom-line">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Bottom Line</span>
+      <h2>A city scaling its services alongside its population.</h2>
+      <p class="lede">Franklin's FY26 budget reflects a city managing rapid growth carefully. Invest Franklin 2.0 funds long-term infrastructure without dramatically burdening residents — road expansions, new public safety hires, and competitive employee pay all point toward scaling services with the city.</p>
+    </div>
+
+    <div class="takeaways">
+      <div class="takeaway">
+        <div class="pill">1</div>
+        <p>Water bills go up on <strong>January 1, 2026</strong> — water +6%, sewer +5%.</p>
+      </div>
+      <div class="takeaway">
+        <div class="pill">2</div>
+        <p>The city is hiring <strong>more police officers and firefighters</strong>, plus civilian support roles.</p>
+      </div>
+      <div class="takeaway">
+        <div class="pill">3</div>
+        <p>The <strong>Mack Hatcher corridor</strong> is finally getting real four-lane investment, funded by the infrastructure portion of the property tax.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAIN ENGLISH -->
+<section id="plain" style="background: var(--bg-alt); border-top: 1px solid var(--border); padding-top: 72px;">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">In Plain English</span>
+      <h2>The whole budget, for normal humans.</h2>
+      <p class="lede">Skip the jargon. Here's what Franklin's FY 2026 budget actually means for you, your wallet, and your neighborhood.</p>
+    </div>
+
+    <div class="plain-list">
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <p>The city has <strong>$243 million</strong> to spend this year — that's slightly less than last year, but the main "day-to-day" fund actually <strong>grew by almost 10%</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21H3z"/><path d="M9 21V12h6v9"/></svg>
+        </div>
+        <p>Your property taxes are going up, but mostly because the county <strong>re-assessed what your home is worth</strong> — Franklin's tax rate still stays one of the <strong>lowest in the whole state</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s5 5 5 9a5 5 0 1 1-10 0c0-4 5-9 5-9z"/></svg>
+        </div>
+        <p>Water and sewer bills are going up in <strong>January 2026</strong> — about <strong>6% for water</strong>, <strong>5% for sewer</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22V10l10-6 10 6v12"/><path d="M9 22v-6h6v6"/><path d="M2 14h20"/></svg>
+        </div>
+        <p>If you stay at a hotel in Franklin, it costs a tiny bit more — the hotel tax goes from <strong>4% to 5%</strong>, and that extra money goes toward <strong>parks</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12z"/></svg>
+        </div>
+        <p>Franklin is hiring more firefighters and police officers — <strong>3 of each</strong>, plus a <strong>counselor for crime victims</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <p>City workers are getting a raise — <strong>at least 2.5%</strong>, with a chance to earn up to <strong>5% based on performance</strong>.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M16 6l5 6-5 6"/><path d="M8 6L3 12l5 6"/></svg>
+        </div>
+        <p>The biggest construction priority is <strong>Mack Hatcher</strong> — the city is working with the state to expand it from <strong>2 lanes to 4 lanes</strong> in two separate sections.</p>
+      </div>
+
+      <div class="plain-row">
+        <div class="glyph" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <p>The city's finances are healthy — <strong>low debt, strong savings</strong>, and a long-term plan in place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Source: City of Franklin official FY2026 budget release &middot; franklintn.gov &middot; May 12, 2025</div>
+    <div>Visualization built from public budget materials. Figures may be refined before final adoption.</div>
+  </div>
+</footer>
+
+<script>
+  // Property tax donut math — total $0.32 per $100, three segments.
+  (function () {
+    const segments = [
+      { id: 'seg-base',  value: 0.2271 },
+      { id: 'seg-infra', value: 0.0679 },
+      { id: 'seg-ops',   value: 0.0250 }
+    ];
+    const total = segments.reduce((s, x) => s + x.value, 0);
+    const r = 48;
+    const C = 2 * Math.PI * r; // circumference
+
+    let offset = 0;
+    segments.forEach(seg => {
+      const el = document.getElementById(seg.id);
+      const portion = seg.value / total;
+      const len = portion * C;
+      el.setAttribute('stroke-dasharray', `${len} ${C - len}`);
+      el.setAttribute('stroke-dashoffset', -offset);
+      offset += len;
+    });
+
+    // Legend hover ↔ center value sync
+    const num = document.getElementById('donut-num');
+    const sub = document.getElementById('donut-sub');
+    const baseNum = num.textContent;
+    const baseSub = sub.textContent;
+
+    function highlight(id) {
+      segments.forEach(s => {
+        const el = document.getElementById(s.id);
+        el.style.opacity = (id && s.id !== id) ? '0.35' : '1';
+        el.style.strokeWidth = (id && s.id === id) ? '36' : '30';
+      });
+    }
+    function clearHighlight() {
+      segments.forEach(s => {
+        const el = document.getElementById(s.id);
+        el.style.opacity = '1';
+        el.style.strokeWidth = '30';
+      });
+      num.textContent = baseNum;
+      sub.textContent = baseSub;
+      document.querySelectorAll('.legend-item').forEach(i => i.classList.remove('active'));
+    }
+
+    document.querySelectorAll('.legend-item').forEach(item => {
+      const segId = 'seg-' + item.dataset.seg;
+      item.addEventListener('mouseenter', () => {
+        highlight(segId);
+        num.textContent = item.dataset.num;
+        sub.textContent = item.dataset.sub;
+      });
+      item.addEventListener('mouseleave', clearHighlight);
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.legend-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Donut segment hover (desktop)
+    segments.forEach(s => {
+      const el = document.getElementById(s.id);
+      const item = document.querySelector(`.legend-item[data-seg="${s.id.replace('seg-','')}"]`);
+      el.addEventListener('mouseenter', () => {
+        highlight(s.id);
+        if (item) {
+          num.textContent = item.dataset.num;
+          sub.textContent = item.dataset.sub;
+        }
+      });
+      el.addEventListener('mouseleave', clearHighlight);
+    });
+  })();
+
+  // Animate rate bars when visible
+  (function () {
+    const bars = document.querySelectorAll('.bar');
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        } else {
+          e.target.classList.remove('in-view');
+        }
+      });
+    }, { threshold: 0.2 });
+    bars.forEach(b => { b.classList.remove('in-view'); io.observe(b); });
+  })();
+</script>
+
+</body>
+</html>
